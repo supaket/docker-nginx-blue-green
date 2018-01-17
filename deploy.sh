@@ -4,13 +4,6 @@ set -e
 
 source init.sh
 
-date > app/index.html
-
-echo 'Build the new image'
-cd app
-docker build . -t app:new
-cd ..
-
 echo 'Check the current state'
 blue_is_run=$(docker exec blue echo 'yes' 2> /dev/null || echo 'no')
 
@@ -23,6 +16,15 @@ then
     new_state='blue'
     new_upstream=${blue_upstream}
 fi
+
+
+ echo "${new_state} $(date)" > app/index.html
+ echo "${new_state} $(date)"
+
+ echo 'Build the new image'
+ cd app
+ docker build . -t app:new
+ cd ..
 
 echo "Create the app:${new_state} image"
 docker tag app:new app:${new_state}
